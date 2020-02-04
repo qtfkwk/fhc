@@ -15,6 +15,14 @@ mod tests {
         assert_eq!(sha256("tests/lorem.txt")?, r);
         Ok(())
     }
+
+    #[test]
+    fn file_does_not_exist() {
+        assert!(match sha256("tests/none.txt") {
+            Err(ref e) => e.kind() == std::io::ErrorKind::NotFound,
+            _ => false,
+        });
+    }
 }
 
 use sha2::Sha256;

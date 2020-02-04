@@ -1,7 +1,7 @@
 warning: function is never used: `sha256`
-  --> src/lib.rs:23:4
+  --> src/lib.rs:31:4
    |
-23 | fn sha256(path: &str) -> Result<String, std::io::Error> {
+31 | fn sha256(path: &str) -> Result<String, std::io::Error> {
    |    ^^^^^^
    |
    = note: `#[warn(dead_code)]` on by default
@@ -9,16 +9,24 @@ warning: function is never used: `sha256`
     Finished test [unoptimized + debuginfo] target(s) in 0.01s
      Running target/debug/deps/fhc-ff245847c9dfa3ac
 
-running 2 tests
+running 3 tests
 test tests::empty ... ok
 test tests::good ... ok
+test tests::file_does_not_exist ... FAILED
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+failures:
 
-   Doc-tests fhc
+---- tests::file_does_not_exist stdout ----
+thread 'tests::file_does_not_exist' panicked at 'assertion failed: match sha256("tests/none.txt") {
+    Err(ref e) => e.kind() == std::io::ErrorKind::NotFound,
+    _ => false,
+}', src/lib.rs:21:9
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 
-running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+failures:
+    tests::file_does_not_exist
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 error: test failed, to rerun pass '--lib'
