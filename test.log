@@ -10,23 +10,15 @@ warning: function is never used: `sha256`
      Running target/debug/deps/fhc-ff245847c9dfa3ac
 
 running 3 tests
+test tests::file_does_not_exist ... ok
 test tests::empty ... ok
 test tests::good ... ok
-test tests::file_does_not_exist ... FAILED
 
-failures:
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
----- tests::file_does_not_exist stdout ----
-thread 'tests::file_does_not_exist' panicked at 'assertion failed: match sha256("tests/none.txt") {
-    Err(ref e) => e.kind() == std::io::ErrorKind::NotFound,
-    _ => false,
-}', src/lib.rs:21:9
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+   Doc-tests fhc
 
+running 0 tests
 
-failures:
-    tests::file_does_not_exist
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
-
-error: test failed, to rerun pass '--lib'
