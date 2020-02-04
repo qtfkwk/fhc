@@ -1,36 +1,24 @@
 warning: function is never used: `sha256`
-  --> src/lib.rs:20:4
+  --> src/lib.rs:23:4
    |
-20 | fn sha256(path: &str) -> Result<String, std::io::Error> {
+23 | fn sha256(path: &str) -> Result<String, std::io::Error> {
    |    ^^^^^^
    |
    = note: `#[warn(dead_code)]` on by default
 
-    Finished test [unoptimized + debuginfo] target(s) in 0.00s
-     Running target/debug/deps/fhc-97bad781709b86ed
+    Finished test [unoptimized + debuginfo] target(s) in 0.01s
+     Running target/debug/deps/fhc-ff245847c9dfa3ac
 
 running 2 tests
-test tests::empty ... FAILED
-test tests::good ... FAILED
+test tests::empty ... ok
+test tests::good ... ok
 
-failures:
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
----- tests::empty stdout ----
-thread 'tests::empty' panicked at 'assertion failed: `(left == right)`
-  left: `"tests/empty.txt"`,
- right: `"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"`', src/lib.rs:8:9
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+   Doc-tests fhc
 
----- tests::good stdout ----
-thread 'tests::good' panicked at 'assertion failed: `(left == right)`
-  left: `"tests/lorem.txt"`,
- right: `"32f5be18c7eba9db87f0138604f64fd541f29b6aa940fb6db0b3255e5071bdd5"`', src/lib.rs:15:9
+running 0 tests
 
-
-failures:
-    tests::empty
-    tests::good
-
-test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 error: test failed, to rerun pass '--lib'

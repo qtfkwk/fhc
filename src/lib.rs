@@ -17,7 +17,13 @@ mod tests {
     }
 }
 
+use sha2::Sha256;
+use sha2::Digest;
+
 fn sha256(path: &str) -> Result<String, std::io::Error> {
-    Ok(path.to_string())
+    let mut file = std::fs::File::open(&path)?;
+    let mut hasher = Sha256::default();
+    let _n = std::io::copy(&mut file, &mut hasher)?;
+    Ok(format!("{:x}", hasher.result()))
 }
 
