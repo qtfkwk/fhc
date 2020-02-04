@@ -1,11 +1,3 @@
-warning: function is never used: `sha256`
-  --> src/lib.rs:31:4
-   |
-31 | fn sha256(path: &str) -> Result<String, std::io::Error> {
-   |    ^^^^^^
-   |
-   = note: `#[warn(dead_code)]` on by default
-
     Finished test [unoptimized + debuginfo] target(s) in 0.01s
      Running target/debug/deps/fhc-ff245847c9dfa3ac
 
@@ -15,6 +7,12 @@ test tests::empty ... ok
 test tests::good ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+     Running target/debug/deps/fhc-20d5f0e19fe9123c
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests fhc
 
