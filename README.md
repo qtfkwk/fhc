@@ -34,7 +34,7 @@ cargo install --path=.
 
 ```
 $ fhc -h
-fhc (file hash checker), 0.1.0, 2020-02-03
+fhc (file hash checker), 0.1.0, 2020-02-04
 
 Usage: `fhc [-h|--help] [--version] [-p|--process OPTION] [file]`
 
