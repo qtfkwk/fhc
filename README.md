@@ -10,9 +10,10 @@ requirements:
   string path
 * Provide a CLI utiility:
     * Simpler and more straightforward usage than `sha256sum`
-    * Save the SHA256 hash to an adjacent `.fhc` file (if it doesn't already
+    * Save the SHA256 hash to an adjacent `.sha256` file (if it doesn't already
       exist)
-    * Compare the current SHA256 hash to an adjacent `.fhc` file (if it exists)
+    * Compare the current SHA256 hash to an adjacent `.sha256` file (if it
+      exists)
 
 # Installation
 
@@ -34,7 +35,7 @@ cargo install --path=.
 
 ```
 $ fhc -h
-fhc (file hash checker), 0.1.0, 2020-02-04
+# fhc (file hash checker), 0.2.0, 2020-02-09
 
 Usage: `fhc [-h|--help] [--version] [-p|--process OPTION] [file]`
 
@@ -44,14 +45,15 @@ Option/argument       | Description
 `--version`           | show version/date
 `-p|--process OPTION` | process option: messaging*, threading, sequential
 `file`                | one or more file paths
+
 ```
 
 # Example
 
 1. Run `fhc` against one or more files to calculate and print the SHA256 hash
-   for each file to stdout and save in adjacent `.fhc` files.
+   for each file to stdout and save in adjacent `.sha256` files.
 2. At any later point, run `fhc` against one or more files with adjacent
-   `.fhc` files to re-calculate the SHA256 hash for each file and report `OK`
+   `.sha256` files to re-calculate the SHA256 hash for each file and report `OK`
    if the hashes match and `FAILED` if the hashes do not match.
 
 # Tests
@@ -62,4 +64,5 @@ The [test.log](test.log) file saves the output of
 # Changelog
 
 * 0.1.0 (2020-02-03): initial public release
+* 0.2.0 (2020-02-09): produce `.sha256` files compatible w/ `sha256sum -c`
 

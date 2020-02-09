@@ -76,7 +76,7 @@ fn sha256(path: &str) -> Result<String, Error> {
 }
 
 fn banner() {
-    println!("fhc (file hash checker), 0.1.0, 2020-02-04");
+    println!("# fhc (file hash checker), 0.2.0, 2020-02-09");
 }
 
 fn usage() {
@@ -214,31 +214,35 @@ fn process_file(path: &str) -> Result<String, Error> {
         Ok(h) => h,
     };
 
-    // Does the `.fhc` file exist?
+    // Does the `.sha256` file exist?
     let result;
-    let fhc = format!("{}.fhc", path);
-    if Path::new(&fhc).exists() {
-        // Yes, the `.fhc` file exists... so open it, read the expected hash,
+    let ckfile = format!("{}.sha256", path);
+    if Path::new(&ckfile).exists() {
+        // Yes, the `.sha256` file exists... so open it, read the expected hash,
         // and compare to the calculated hash.
-        let file = File::open(&fhc).expect("Could not open file");
+        let file = File::open(&ckfile).expect("Could not open file");
         let mut reader = BufReader::new(file);
         let mut expect = String::new();
         if let Err(e) = reader.read_line(&mut expect) {
             return Err(err(e, path));
         }
-        if hash == expect.lines().next().unwrap() {
+        expect = expect.lines().next().unwrap().to_string();
+        expect.truncate(64);
+        if hash == expect {
             result = format!("{}: OK", path);
         } else {
             result = format!("{}: FAILED", path);
         }
     } else {
-        // No, the `.fhc` file does not exist... so save the hash to a new
-        // `.fhc` file and print it to stdout.
-        let mut file = match File::create(&fhc) {
+        // No, the `.sha256` file does not exist... so save the hash to a new
+        // `.sha256` file and print it to stdout.
+        let mut file = match File::create(&ckfile) {
             Err(e) => return Err(err(e, path)),
             Ok(h) => h,
         };
-        if let Err(e) = file.write_all(format!("{}\n", hash).as_bytes()) {
+        let filename = Path::new(&path).file_name().unwrap().to_str().unwrap();
+        let ck = format!("{}  {}\n", hash, filename);
+        if let Err(e) = file.write_all(ck.as_bytes()) {
             return Err(err(e, path));
         }
         result = format!("{}  {}", hash, path);
