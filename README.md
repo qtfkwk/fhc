@@ -35,7 +35,7 @@ cargo install --path=.
 
 ```
 $ fhc -h
-# fhc (file hash checker), 0.2.1, 2020-02-09
+# fhc (file hash checker), 0.2.2, 2020-11-18
 
 Usage: `fhc [-h|--help] [--version] [-p|--process OPTION] [file]`
 
@@ -45,7 +45,6 @@ Option/argument       | Description
 `--version`           | show version/date
 `-p|--process OPTION` | process option: messaging*, threading, sequential
 `file`                | one or more file paths
-
 ```
 
 # Example
@@ -65,4 +64,5 @@ The [test.log](test.log) file saves the output of
 
 * 0.1.0 (2020-02-03): initial public release
 * 0.2.1 (2020-02-09): produce `.sha256` files compatible w/ `sha256sum -c`
+* 0.2.2 (2020-11-18): update sha2 crate version
 
