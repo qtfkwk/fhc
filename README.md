@@ -15,11 +15,11 @@ requirements:
     * Compare the current SHA256 hash to an adjacent `.sha256` file (if it
       exists)
 
-[anyhow]: https://crates.io/crates/anyhow
-[clap]: https://crates.io/crates/clap
-[criterion]: https://crates.io/crates/criterion
-[sha2]: https://crates.io/crates/sha2
-[rayon]: https://crates.io/crates/rayon
+[`anyhow`]: https://crates.io/crates/anyhow
+[`clap`]: https://crates.io/crates/clap
+[`criterion`]: https://crates.io/crates/criterion
+[`sha2`]: https://crates.io/crates/sha2
+[`rayon`]: https://crates.io/crates/rayon
 
 # Usage
 
