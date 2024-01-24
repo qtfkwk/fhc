@@ -63,6 +63,8 @@ Options:
   option logic from CLI to library via process option functions and the process
   option `run` method; add [`criterion`] benchmarks; fix changelog; update
   dependencies
+    * 0.4.1 (2024-01-24): Fix readme
+    * 0.4.2 (2024-01-24): Fix changelog
 
 [`criterion`]: https://crates.io/crates/criterion
 

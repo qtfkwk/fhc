@@ -37,6 +37,7 @@ cargo test -- --nocapture --test-threads=1
 ```
 cargo bench
 fd '.*\.sha256' |xargs -rP0 rm
+cp target/criterion/ProcessOption/report/violin.svg t/violin.svg
 ```
 
 # check
