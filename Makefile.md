@@ -32,6 +32,13 @@ cargo clippy -- -D clippy::all
 cargo test -- --nocapture --test-threads=1
 ```
 
+# bench
+
+```
+cargo bench
+fd '.*\.sha256' |xargs -rP0 rm
+```
+
 # check
 
 ```

@@ -1,4 +1,5 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
+use rayon::prelude::*;
 use sha2::{Digest, Sha256};
 use std::{
     fs::File,
@@ -52,4 +53,96 @@ pub fn process_file<P: AsRef<Path>>(file: P) -> Result<String> {
         ckfile.write_all(content.as_bytes())?;
         format!("{}  {}", hash, file.display())
     })
+}
+
+#[derive(Clone, Debug, clap::ValueEnum)]
+pub enum ProcessOption {
+    SequentialForLoop,
+    SequentialIter,
+    Threading,
+    Messaging,
+    RayonParIter,
+}
+
+pub use ProcessOption::*;
+
+impl ProcessOption {
+    pub fn run<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+        &self,
+        files: &[P],
+    ) -> Vec<Result<String>> {
+        match self {
+            SequentialForLoop => seq_for_loop(files),
+            SequentialIter => seq_iter(files),
+            Threading => threading(files),
+            Messaging => messaging(files),
+            RayonParIter => rayon_par_iter(files),
+        }
+    }
+}
+
+pub fn seq_for_loop<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+    files: &[P],
+) -> Vec<Result<String>> {
+    let mut r = vec![];
+    for file in files {
+        r.push(process_file(file));
+    }
+    r
+}
+
+pub fn seq_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+    files: &[P],
+) -> Vec<Result<String>> {
+    files.iter().map(process_file).collect()
+}
+
+pub fn threading<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+    files: &[P],
+) -> Vec<Result<String>> {
+    let mut r = vec![];
+    let mut handles = vec![];
+    for file in files.iter().cloned() {
+        handles.push(std::thread::spawn(move || process_file(file)));
+    }
+    for handle in handles {
+        match handle.join() {
+            Ok(t) => {
+                r.push(t);
+            }
+            Err(e) => {
+                r.push(Err(anyhow!(format!("{e:?}"))));
+            }
+        }
+    }
+    r
+}
+
+pub fn messaging<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+    files: &[P],
+) -> Vec<Result<String>> {
+    let mut r = vec![];
+    let mut rxs = vec![];
+    for file in files.iter().cloned() {
+        let (tx, rx) = std::sync::mpsc::channel();
+        rxs.push(rx);
+        std::thread::spawn(move || tx.send(process_file(file)).unwrap());
+    }
+    for rx in rxs {
+        match rx.recv() {
+            Ok(t) => {
+                r.push(t);
+            }
+            Err(e) => {
+                r.push(Err(anyhow!(format!("{e:?}"))));
+            }
+        }
+    }
+    r
+}
+
+pub fn rayon_par_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
+    files: &[P],
+) -> Vec<Result<String>> {
+    files.par_iter().map(process_file).collect()
 }
