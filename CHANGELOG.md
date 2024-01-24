@@ -12,6 +12,7 @@
     * 0.4.1 (2024-01-24): Fix readme
     * 0.4.2 (2024-01-24): Fix changelog
 * 0.5.0 (2024-01-24): Add [`blake3`] and `-a` option
+    * 0.5.1 (2024-01-24): Fix readme
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
