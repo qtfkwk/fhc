@@ -25,7 +25,7 @@ requirements:
 
 ```
 $ fhc -h
-File hash checker (SHA256)
+File hash checker (SHA256, BLAKE3)
 
 Usage: fhc [OPTIONS] [FILES]...
 
@@ -33,6 +33,8 @@ Arguments:
   [FILES]...  File(s)
 
 Options:
+  -a <ALGORITHM>           Algorithm [default: sha256] [possible values: sha256,
+                           blake3]
   -p, --process <PROCESS>  Process option [default: messaging] [possible values:
                            sequential-for-loop, sequential-iter, threading,
                            messaging, rayon-par-iter]
@@ -50,7 +52,9 @@ Options:
 
 # Benchmark
 
-![](t/violin.svg)
+![](t/violin1.svg)
+
+![](t/violin2.svg)
 
 # Changelog
 
@@ -65,6 +69,8 @@ Options:
   dependencies
     * 0.4.1 (2024-01-24): Fix readme
     * 0.4.2 (2024-01-24): Fix changelog
+* 0.5.0 (2024-01-24): Add [`blake3`] and `-a` option
 
 [`criterion`]: https://crates.io/crates/criterion
+[`blake3`]: https://crates.io/crates/blake3
 

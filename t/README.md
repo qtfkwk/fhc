@@ -38,7 +38,9 @@ $ fhc -h
 
 # Benchmark
 
-![](violin.svg)
+![](violin1.svg)
+
+![](violin2.svg)
 
 !inc:../CHANGELOG.md
 

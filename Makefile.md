@@ -36,8 +36,10 @@ cargo test -- --nocapture --test-threads=1
 
 ```
 cargo bench
+fd '.*\.b3' |xargs -rP0 rm
 fd '.*\.sha256' |xargs -rP0 rm
-cp target/criterion/ProcessOption/report/violin.svg t/violin.svg
+cp target/criterion/SingleFile/report/violin.svg t/violin1.svg
+cp target/criterion/ProcessOption/report/violin.svg t/violin2.svg
 ```
 
 # check
@@ -71,7 +73,7 @@ cargo uninstall $(toml get -r Cargo.toml package.name)
 # install-deps
 
 ```
-cargo install cargo-audit cargo-edit cargo-outdated cocomo dtg kapow tokei toml-cli
+cargo install cargo-audit cargo-edit cargo-outdated cocomo dtg fd-find kapow tokei toml-cli
 ```
 
 # scaffold

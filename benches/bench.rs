@@ -16,39 +16,74 @@ const FILES: [&str; 11] = [
     "t/README.md",
 ];
 
-fn single_file() {
-    let _result = sha256(&FILES[0]);
+fn sha256_single_file() {
+    let _result = file_sha256(&FILES[0]);
 }
 
-fn _seq_for_loop() {
-    let _results = seq_for_loop(&FILES);
+fn blake3_single_file() {
+    let _result = file_blake3(&FILES[0]);
 }
 
-fn _seq_iter() {
-    let _results = seq_iter(&FILES);
+fn sha256_seq_for_loop() {
+    let _results = seq_for_loop(&FILES, Hash::Sha256);
 }
 
-fn _threading() {
-    let _results = threading(&FILES);
+fn sha256_seq_iter() {
+    let _results = seq_iter(&FILES, Hash::Sha256);
 }
 
-fn _messaging() {
-    let _results = messaging(&FILES);
+fn sha256_threading() {
+    let _results = threading(&FILES, Hash::Sha256);
 }
 
-fn _rayon_par_iter() {
-    let _results = rayon_par_iter(&FILES);
+fn sha256_messaging() {
+    let _results = messaging(&FILES, Hash::Sha256);
+}
+
+fn sha256_rayon_par_iter() {
+    let _results = rayon_par_iter(&FILES, Hash::Sha256);
+}
+
+fn blake3_seq_for_loop() {
+    let _results = seq_for_loop(&FILES, Hash::Blake3);
+}
+
+fn blake3_seq_iter() {
+    let _results = seq_iter(&FILES, Hash::Blake3);
+}
+
+fn blake3_threading() {
+    let _results = threading(&FILES, Hash::Blake3);
+}
+
+fn blake3_messaging() {
+    let _results = messaging(&FILES, Hash::Blake3);
+}
+
+fn blake3_rayon_par_iter() {
+    let _results = rayon_par_iter(&FILES, Hash::Blake3);
 }
 
 fn bench(c: &mut Criterion) {
-    c.bench_function("Single file", |b| b.iter(single_file));
+    {
+        let mut group = c.benchmark_group("SingleFile");
+        group.bench_function("Sha256", |b| b.iter(sha256_single_file));
+        group.bench_function("Blake3", |b| b.iter(blake3_single_file));
+    }
 
-    let mut group = c.benchmark_group("ProcessOption");
-    group.bench_function("SequentialForLoop", |b| b.iter(_seq_for_loop));
-    group.bench_function("SequentialIter", |b| b.iter(_seq_iter));
-    group.bench_function("Threading", |b| b.iter(_threading));
-    group.bench_function("Messaging", |b| b.iter(_messaging));
-    group.bench_function("RayonParIter", |b| b.iter(_rayon_par_iter));
+    {
+        let mut group = c.benchmark_group("ProcessOption");
+        group.bench_function("SequentialForLoop/Sha256", |b| b.iter(sha256_seq_for_loop));
+        group.bench_function("SequentialIter/Sha256", |b| b.iter(sha256_seq_iter));
+        group.bench_function("Threading/Sha256", |b| b.iter(sha256_threading));
+        group.bench_function("Messaging/Sha256", |b| b.iter(sha256_messaging));
+        group.bench_function("RayonParIter/Sha256", |b| b.iter(sha256_rayon_par_iter));
+        group.bench_function("SequentialForLoop/Blake3", |b| b.iter(blake3_seq_for_loop));
+        group.bench_function("SequentialIter/Blake3", |b| b.iter(blake3_seq_iter));
+        group.bench_function("Threading/Blake3", |b| b.iter(blake3_threading));
+        group.bench_function("Messaging/Blake3", |b| b.iter(blake3_messaging));
+        group.bench_function("RayonParIter/Blake3", |b| b.iter(blake3_rayon_par_iter));
+    }
 }
 
 criterion_group!(benches, bench);
