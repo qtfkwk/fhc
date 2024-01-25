@@ -31,8 +31,8 @@ $ fhc -h
 
 # Example
 
-1. Run `fhc` against one or more files to calculate and print the SHA256 hash
-   for each file to stdout and save in adjacent hash files.
+1. Run `fhc` against one or more files to calculate and print the SHA256 or
+   BLAKE3 hash for each file to stdout and save in adjacent hash files.
 2. At any later point, run `fhc` against one or more files with adjacent
    hash files to re-calculate the hash for each file and report `OK` if the
    hashes match and `FAILED` if the hashes do not match.
