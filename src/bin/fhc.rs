@@ -7,11 +7,11 @@ use std::path::PathBuf;
 #[command(about, version, max_term_width = 80)]
 struct Cli {
     /// Algorithm
-    #[arg(short, default_value = "sha256")]
+    #[arg(short, default_value = "blake3")]
     algorithm: Hash,
 
-    /// Process option
-    #[arg(short, long, default_value = "messaging")]
+    /// Approach for processing multiple files
+    #[arg(short, long, default_value = "rayon-par-iter")]
     process: ProcessOption,
 
     /// File(s)

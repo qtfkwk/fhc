@@ -34,19 +34,20 @@ Arguments:
   [FILES]...  File(s)
 
 Options:
-  -a <ALGORITHM>           Algorithm [default: sha256] [possible values: sha256,
-                           blake3]
-  -p, --process <PROCESS>  Process option [default: messaging] [possible values:
+  -a <ALGORITHM>           Algorithm [default: blake3] [possible values: blake3,
+                           sha256]
+  -p, --process <PROCESS>  Approach for processing multiple files [default:
+                           rayon-par-iter] [possible values: rayon-par-iter,
                            sequential-for-loop, sequential-iter, threading,
-                           messaging, rayon-par-iter]
+                           messaging]
   -h, --help               Print help
   -V, --version            Print version
 ```
 
 # Example
 
-1. Run `fhc` against one or more files to calculate and print the SHA256 hash
-   for each file to stdout and save in adjacent hash files.
+1. Run `fhc` against one or more files to calculate and print the SHA256 or
+   BLAKE3 hash for each file to stdout and save in adjacent hash files.
 2. At any later point, run `fhc` against one or more files with adjacent
    hash files to re-calculate the hash for each file and report `OK` if the
    hashes match and `FAILED` if the hashes do not match.
@@ -73,6 +74,8 @@ Options:
 * 0.5.0 (2024-01-24): Add [`blake3`] and `-a` option
     * 0.5.1 (2024-01-24): Fix readme
     * 0.5.2 (2024-01-25): Fix doc
+    * 0.5.3 (2024-01-25): Fix readme
+* 0.6.0 (2024-01-25): Change CLI defaults to `-a blake3` and `-p rayon-par-iter`
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3

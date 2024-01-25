@@ -15,8 +15,8 @@ Hash algorithm
 */
 #[derive(Clone, Copy, Debug, clap::ValueEnum)]
 pub enum Hash {
-    Sha256,
     Blake3,
+    Sha256,
 }
 
 impl Hash {
@@ -104,11 +104,11 @@ Approaches for processing multiple files
 */
 #[derive(Clone, Debug, clap::ValueEnum)]
 pub enum ProcessOption {
+    RayonParIter,
     SequentialForLoop,
     SequentialIter,
     Threading,
     Messaging,
-    RayonParIter,
 }
 
 impl ProcessOption {
