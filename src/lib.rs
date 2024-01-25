@@ -10,6 +10,9 @@ use std::{
 #[cfg(test)]
 mod tests;
 
+/**
+Hash algorithm
+*/
 #[derive(Clone, Copy, Debug, clap::ValueEnum)]
 pub enum Hash {
     Sha256,
@@ -17,7 +20,7 @@ pub enum Hash {
 }
 
 impl Hash {
-    /*
+    /**
     Hash a file and return the hash
     */
     pub fn hash_file<P: AsRef<Path>>(&self, file: P) -> Result<String> {
@@ -27,6 +30,9 @@ impl Hash {
         }
     }
 
+    /**
+    Return the file extension for the hash file
+    */
     fn ext(&self) -> &str {
         match self {
             Self::Sha256 => "sha256",
@@ -37,9 +43,9 @@ impl Hash {
     /**
     Process a file
 
-    If the hash file does not exist, hash the file, save the hash file, and return the result.
-
     If the hash file exists, hash the file, compare hashes, and return the result.
+
+    If the hash file does not exist, hash the file, save the hash file, and return the result.
     */
     pub fn process_file<P: AsRef<Path>>(&self, file: P) -> Result<String> {
         let file = file.as_ref();
@@ -93,6 +99,9 @@ pub fn file_blake3<P: AsRef<Path>>(file: P) -> Result<String> {
     Ok(format!("{}", hasher.finalize()))
 }
 
+/**
+Approaches for processing multiple files
+*/
 #[derive(Clone, Debug, clap::ValueEnum)]
 pub enum ProcessOption {
     SequentialForLoop,
@@ -102,24 +111,28 @@ pub enum ProcessOption {
     RayonParIter,
 }
 
-pub use ProcessOption::*;
-
 impl ProcessOption {
+    /**
+    Process files with the given hash
+    */
     pub fn run<P: AsRef<Path> + Clone + Send + Sync + 'static>(
         &self,
         files: &[P],
         hash: Hash,
     ) -> Vec<Result<String>> {
         match self {
-            SequentialForLoop => seq_for_loop(files, hash),
-            SequentialIter => seq_iter(files, hash),
-            Threading => threading(files, hash),
-            Messaging => messaging(files, hash),
-            RayonParIter => rayon_par_iter(files, hash),
+            Self::SequentialForLoop => seq_for_loop(files, hash),
+            Self::SequentialIter => seq_iter(files, hash),
+            Self::Threading => threading(files, hash),
+            Self::Messaging => messaging(files, hash),
+            Self::RayonParIter => rayon_par_iter(files, hash),
         }
     }
 }
 
+/**
+Process files with the given hash algorithm via seqential for loop
+*/
 pub fn seq_for_loop<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,
@@ -131,6 +144,9 @@ pub fn seq_for_loop<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     r
 }
 
+/**
+Process files with the given hash algorithm via seqential iterator
+*/
 pub fn seq_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,
@@ -138,6 +154,9 @@ pub fn seq_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files.iter().map(|file| hash.process_file(file)).collect()
 }
 
+/**
+Process files with the given hash algorithm via threading
+*/
 pub fn threading<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,
@@ -160,6 +179,9 @@ pub fn threading<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     r
 }
 
+/**
+Process files with the given hash algorithm via messaging
+*/
 pub fn messaging<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,
@@ -184,6 +206,9 @@ pub fn messaging<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     r
 }
 
+/**
+Process files with the given hash algorithm via Rayon parallel iterator
+*/
 pub fn rayon_par_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,

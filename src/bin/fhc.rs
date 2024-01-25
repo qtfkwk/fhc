@@ -22,7 +22,7 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     let process = if cli.files.len() == 1 {
-        SequentialForLoop
+        ProcessOption::SequentialForLoop
     } else {
         cli.process.clone()
     };
