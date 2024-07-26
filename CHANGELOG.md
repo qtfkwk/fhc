@@ -16,6 +16,7 @@
     * 0.5.2 (2024-01-25): Fix doc
     * 0.5.3 (2024-01-25): Fix readme
 * 0.6.0 (2024-01-25): Change CLI defaults to `-a blake3` and `-p rayon-par-iter`
+* 0.7.0 (2024-07-26): Print help if zero files; fix makefile; update dependencies
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3

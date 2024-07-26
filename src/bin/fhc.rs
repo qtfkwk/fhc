@@ -1,5 +1,5 @@
 use anyhow::Result;
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use fhc::*;
 use std::path::PathBuf;
 
@@ -20,6 +20,14 @@ struct Cli {
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
+
+    // Print help if no files or arguments
+    if cli.files.is_empty() {
+        let mut cmd = Cli::command();
+        cmd.build();
+        cmd.print_help().unwrap();
+        return Ok(());
+    }
 
     let process = if cli.files.len() == 1 {
         ProcessOption::SequentialForLoop
