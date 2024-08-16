@@ -29,6 +29,11 @@ $ fhc -h
 !run:../target/release/fhc -h
 ```
 
+```
+$ fhc -V
+!run:../target/release/fhc -V
+```
+
 # Example
 
 1. Run `fhc` against one or more files to calculate and print the SHA256 or

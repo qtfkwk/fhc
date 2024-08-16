@@ -40,7 +40,17 @@ cargo clippy -- -D clippy::all
 * `**/*.rs`
 
 ```
-cargo test --release
+cargo test
+```
+
+# bench
+
+```
+cargo bench
+fd '.*\.b3' |xargs -rP0 rm
+fd '.*\.sha256' |xargs -rP0 rm
+cp target/criterion/SingleFile/report/violin.svg t/violin1.svg
+cp target/criterion/ProcessOption/report/violin.svg t/violin2.svg
 ```
 
 # build
