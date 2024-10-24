@@ -14,6 +14,7 @@
 * 0.6.0 (2024-01-25): Change CLI defaults to `-a blake3` and `-p rayon-par-iter`
 * 0.7.0 (2024-07-26): Print help if zero files; fix makefile; update dependencies
     * 0.7.1 (2024-08-16): Fix makefile; fix changelog; fix readme; update dependencies
+* 0.8.0 (2024-10-24): Add clap color; update dependencies
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
