@@ -35,7 +35,7 @@ Arguments:
 
 Options:
   -a <ALGORITHM>           Algorithm [default: blake3] [possible values: blake3,
-                           sha256]
+                           sha256, blake3-sha256, all]
   -p, --process <PROCESS>  Approach for processing multiple files [default:
                            rayon-par-iter] [possible values: rayon-par-iter,
                            sequential-for-loop, sequential-iter, threading,
@@ -46,7 +46,7 @@ Options:
 
 ```
 $ fhc -V
-fhc 0.8.0
+fhc 0.9.0
 ```
 
 # Example
@@ -80,6 +80,7 @@ fhc 0.8.0
 * 0.7.0 (2024-07-26): Print help if zero files; fix makefile; update dependencies
     * 0.7.1 (2024-08-16): Fix makefile; fix changelog; fix readme; update dependencies
 * 0.8.0 (2024-10-24): Add clap color; update dependencies
+* 0.9.0 (2024-11-04): **BREAKING**: prefix hashes with algorithm labels ("BLAKE3:", "SHA256:"); add `Hash::Blake3Sha256` and `Hash::All` variants and enable running multiple hash algorithms while reading the file from disk just once; add cargo lock file; housekeeping; update dependencies
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
