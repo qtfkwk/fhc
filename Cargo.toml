@@ -1,6 +1,6 @@
 [package]
 name = "fhc"
-version = "0.9.0"
+version = "0.10.0"
 edition = "2021"
 description = "File hash checker (SHA256, BLAKE3)"
 repository = "https://github.com/qtfkwk/fhc"

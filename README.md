@@ -3,16 +3,16 @@
 File hash checker represents a minimal solution meeting the following
 requirements:
 
-* Calculate the SHA256 or BLAKE3 hashes of one or more files in sequence (for
-  loop, iterator) or parallel (threading, messaging, [`rayon`] parallel
-  iterator)
+* Calculate the BLAKE3, SHA256, and/or SHA512 hashes of one or more files in
+  sequence (for loop, iterator) or parallel (threading, messaging, [`rayon`]
+  parallel iterator)
 * Provide library API
 * Benchmarks via [`criterion`]
 * Minimal dependencies: [`blake3`], [`sha2`], [`anyhow`], [`clap`], [`rayon`]
 * Provide a CLI utiility:
     * Simpler and more straightforward usage than `sha256sum`, `b3sum`
     * Save the hash to an adjacent hash file (if it doesn't already exist)
-      (`.sha256`, `.b3`)
+      (`.sha256`, `.sha512`, `.b3`)
     * Compare the current hash to an adjacent hash file (if it exists)
 
 [`anyhow`]: https://crates.io/crates/anyhow
@@ -35,7 +35,8 @@ Arguments:
 
 Options:
   -a <ALGORITHM>           Algorithm [default: blake3] [possible values: blake3,
-                           sha256, blake3-sha256, all]
+                           sha256, sha512, blake3-sha256, blake3-sha512,
+                           sha256-sha512, all]
   -p, --process <PROCESS>  Approach for processing multiple files [default:
                            rayon-par-iter] [possible values: rayon-par-iter,
                            sequential-for-loop, sequential-iter, threading,
@@ -46,7 +47,7 @@ Options:
 
 ```
 $ fhc -V
-fhc 0.9.0
+fhc 0.10.0
 ```
 
 # Example
@@ -81,6 +82,7 @@ fhc 0.9.0
     * 0.7.1 (2024-08-16): Fix makefile; fix changelog; fix readme; update dependencies
 * 0.8.0 (2024-10-24): Add clap color; update dependencies
 * 0.9.0 (2024-11-04): **BREAKING**: prefix hashes with algorithm labels ("BLAKE3:", "SHA256:"); add `Hash::Blake3Sha256` and `Hash::All` variants and enable running multiple hash algorithms while reading the file from disk just once; add cargo lock file; housekeeping; update dependencies
+* 0.10.0 (2024-11-05): Add SHA512
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3

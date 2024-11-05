@@ -3,16 +3,16 @@
 File hash checker represents a minimal solution meeting the following
 requirements:
 
-* Calculate the SHA256 or BLAKE3 hashes of one or more files in sequence (for
-  loop, iterator) or parallel (threading, messaging, [`rayon`] parallel
-  iterator)
+* Calculate the BLAKE3, SHA256, and/or SHA512 hashes of one or more files in
+  sequence (for loop, iterator) or parallel (threading, messaging, [`rayon`]
+  parallel iterator)
 * Provide library API
 * Benchmarks via [`criterion`]
 * Minimal dependencies: [`blake3`], [`sha2`], [`anyhow`], [`clap`], [`rayon`]
 * Provide a CLI utiility:
     * Simpler and more straightforward usage than `sha256sum`, `b3sum`
     * Save the hash to an adjacent hash file (if it doesn't already exist)
-      (`.sha256`, `.b3`)
+      (`.sha256`, `.sha512`, `.b3`)
     * Compare the current hash to an adjacent hash file (if it exists)
 
 [`anyhow`]: https://crates.io/crates/anyhow

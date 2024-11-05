@@ -2,7 +2,7 @@ use {
     anyhow::{anyhow, Result},
     clap::ValueEnum,
     rayon::prelude::*,
-    sha2::{Digest, Sha256},
+    sha2::{Digest, Sha256, Sha512},
     std::{
         fs::File,
         io::{copy, BufRead, BufReader, Read, Write},
@@ -18,7 +18,10 @@ mod tests;
 pub enum Hash {
     Blake3,
     Sha256,
+    Sha512,
     Blake3Sha256,
+    Blake3Sha512,
+    Sha256Sha512,
     All,
 }
 
@@ -28,7 +31,10 @@ impl Hash {
         match self {
             Hash::Blake3 => file_blake3(file),
             Hash::Sha256 => file_sha256(file),
+            Hash::Sha512 => file_sha512(file),
             Hash::Blake3Sha256 => file_blake3_sha256(file),
+            Hash::Blake3Sha512 => file_blake3_sha512(file),
+            Hash::Sha256Sha512 => file_sha256_sha512(file),
             Hash::All => file_all(file),
         }
     }
@@ -76,13 +82,23 @@ impl Hash {
         let ckfiles = match self {
             Hash::Blake3 => vec![format!("{}.b3", file.display())],
             Hash::Sha256 => vec![format!("{}.sha256", file.display())],
+            Hash::Sha512 => vec![format!("{}.sha512", file.display())],
             Hash::Blake3Sha256 => vec![
                 format!("{}.b3", file.display()),
                 format!("{}.sha256", file.display()),
             ],
+            Hash::Blake3Sha512 => vec![
+                format!("{}.b3", file.display()),
+                format!("{}.sha512", file.display()),
+            ],
+            Hash::Sha256Sha512 => vec![
+                format!("{}.sha256", file.display()),
+                format!("{}.sha512", file.display()),
+            ],
             Hash::All => vec![
                 format!("{}.b3", file.display()),
                 format!("{}.sha256", file.display()),
+                format!("{}.sha512", file.display()),
             ],
         };
 
@@ -108,6 +124,18 @@ pub fn file_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     Ok(vec![(
         format!("{}.sha256", file.display()),
         format!("SHA256:{:x}", hasher.finalize()),
+    )])
+}
+
+/// Calculate the SHA512 hash for a file
+pub fn file_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
+    let file = file.as_ref();
+    let mut f = File::open(file)?;
+    let mut hasher = Sha512::new();
+    copy(&mut f, &mut hasher)?;
+    Ok(vec![(
+        format!("{}.sha512", file.display()),
+        format!("SHA512:{:x}", hasher.finalize()),
     )])
 }
 
@@ -148,6 +176,56 @@ pub fn file_blake3_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
     ])
 }
 
+/// Calculate the BLAKE3 and SHA512 hashes for a file
+pub fn file_blake3_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
+    let file = file.as_ref();
+    let mut f = File::open(file)?;
+    let mut buf = vec![];
+    f.read_to_end(&mut buf)?;
+
+    let mut hasher_b3 = blake3::Hasher::new();
+    hasher_b3.update(&buf);
+
+    let mut hasher_sha512 = Sha512::new();
+    hasher_sha512.update(&buf);
+
+    Ok(vec![
+        (
+            format!("{}.b3", file.display()),
+            format!("BLAKE3:{}", hasher_b3.finalize()),
+        ),
+        (
+            format!("{}.sha512", file.display()),
+            format!("SHA512:{:x}", hasher_sha512.finalize()),
+        ),
+    ])
+}
+
+/// Calculate the SHA256 and SHA512 hashes for a file
+pub fn file_sha256_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
+    let file = file.as_ref();
+    let mut f = File::open(file)?;
+    let mut buf = vec![];
+    f.read_to_end(&mut buf)?;
+
+    let mut hasher_sha256 = Sha256::new();
+    hasher_sha256.update(&buf);
+
+    let mut hasher_sha512 = Sha512::new();
+    hasher_sha512.update(&buf);
+
+    Ok(vec![
+        (
+            format!("{}.sha256", file.display()),
+            format!("SHA256:{:x}", hasher_sha256.finalize()),
+        ),
+        (
+            format!("{}.sha512", file.display()),
+            format!("SHA512:{:x}", hasher_sha512.finalize()),
+        ),
+    ])
+}
+
 /// Calculate all hashes for a file
 pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
@@ -161,6 +239,9 @@ pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let mut hasher_sha256 = Sha256::new();
     hasher_sha256.update(&buf);
 
+    let mut hasher_sha512 = Sha512::new();
+    hasher_sha512.update(&buf);
+
     Ok(vec![
         (
             format!("{}.b3", file.display()),
@@ -169,6 +250,10 @@ pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
         (
             format!("{}.sha256", file.display()),
             format!("SHA256:{:x}", hasher_sha256.finalize()),
+        ),
+        (
+            format!("{}.sha512", file.display()),
+            format!("SHA512:{:x}", hasher_sha512.finalize()),
         ),
     ])
 }
