@@ -47,7 +47,7 @@ Options:
 
 ```
 $ fhc -V
-fhc 0.10.1
+fhc 0.10.2
 ```
 
 # Example
@@ -84,6 +84,7 @@ fhc 0.10.1
 * 0.9.0 (2024-11-04): **BREAKING**: prefix hashes with algorithm labels ("BLAKE3:", "SHA256:"); add `Hash::Blake3Sha256` and `Hash::All` variants and enable running multiple hash algorithms while reading the file from disk just once; add cargo lock file; housekeeping; update dependencies
 * 0.10.0 (2024-11-05): Add SHA512
     * 0.10.1 (2024-11-05): Fix description
+    * 0.10.2 (2024-12-04): Update dependencies; add commit target to makefile
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
