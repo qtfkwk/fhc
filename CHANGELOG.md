@@ -19,6 +19,7 @@
 * 0.10.0 (2024-11-05): Add SHA512
     * 0.10.1 (2024-11-05): Fix description
     * 0.10.2 (2024-12-04): Update dependencies; add commit target to makefile
+    * 0.10.3 (2025-02-20): Update dependencies
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
