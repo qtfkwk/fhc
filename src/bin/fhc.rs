@@ -1,5 +1,5 @@
 use anyhow::Result;
-use clap::{builder::Styles, CommandFactory, Parser};
+use clap::{CommandFactory, Parser, builder::Styles};
 use fhc::*;
 use std::path::PathBuf;
 

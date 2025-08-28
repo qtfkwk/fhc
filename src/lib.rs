@@ -1,11 +1,11 @@
 use {
-    anyhow::{anyhow, Result},
+    anyhow::{Result, anyhow},
     clap::ValueEnum,
     rayon::prelude::*,
     sha2::{Digest, Sha256, Sha512},
     std::{
         fs::File,
-        io::{copy, BufRead, BufReader, Read, Write},
+        io::{BufRead, BufReader, Read, Write, copy},
         path::Path,
     },
 };

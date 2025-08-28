@@ -66,7 +66,9 @@ fn sha512_empty() {
         file_sha512("tests/empty.txt").unwrap(),
         vec![(
             String::from("tests/empty.txt.sha512"),
-            String::from("SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"),
+            String::from(
+                "SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e"
+            ),
         )],
     );
 }
@@ -77,7 +79,9 @@ fn sha512_good() {
         file_sha512("tests/lorem.txt").unwrap(),
         vec![(
             String::from("tests/lorem.txt.sha512"),
-            String::from("SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15"),
+            String::from(
+                "SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15"
+            ),
         )],
     );
 }
@@ -155,7 +159,9 @@ fn blake3_sha512_empty() {
             ),
             (
                 String::from("tests/empty.txt.sha512"),
-                String::from("SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",),
+                String::from(
+                    "SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",
+                ),
             ),
         ],
     );
@@ -174,7 +180,9 @@ fn blake3_sha512_good() {
             ),
             (
                 String::from("tests/lorem.txt.sha512"),
-                String::from("SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",),
+                String::from(
+                    "SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",
+                ),
             ),
         ],
     );
@@ -203,7 +211,9 @@ fn sha256_sha512_empty() {
             ),
             (
                 String::from("tests/empty.txt.sha512"),
-                String::from("SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",),
+                String::from(
+                    "SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",
+                ),
             ),
         ],
     );
@@ -222,7 +232,9 @@ fn sha256_sha512_good() {
             ),
             (
                 String::from("tests/lorem.txt.sha512"),
-                String::from("SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",),
+                String::from(
+                    "SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",
+                ),
             ),
         ],
     );
@@ -257,7 +269,9 @@ fn all_empty() {
             ),
             (
                 String::from("tests/empty.txt.sha512"),
-                String::from("SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",),
+                String::from(
+                    "SHA512:cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",
+                ),
             ),
         ],
     );
@@ -282,7 +296,9 @@ fn all_good() {
             ),
             (
                 String::from("tests/lorem.txt.sha512"),
-                String::from("SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",),
+                String::from(
+                    "SHA512:2f8403b95fdb3ed42847fc6da7e3d7dfb7bbfb02a3d5fa04e2b1a585b31d4330dad3d425a3947757602b98246670ca44d8f7a8a62f97f7ce10fb6bf15ddf5b15",
+                ),
             ),
         ],
     );
