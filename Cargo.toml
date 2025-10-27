@@ -1,6 +1,6 @@
 [package]
 name = "fhc"
-version = "0.11.0"
+version = "0.11.1"
 edition = "2024"
 description = "File hash checker (BLAKE3, SHA256, SHA512)"
 repository = "https://github.com/qtfkwk/fhc"
@@ -9,10 +9,10 @@ keywords = ["sha256sum", "sha256", "blake3", "b3", "integrity"]
 categories = ["command-line-utilities"]
 
 [dependencies]
-anyhow = "1.0.99"
+anyhow = "1.0.100"
 blake3 = "1.8.2"
-clap = { version = "4.5.46", features = ["derive", "wrap_help"] }
-clap-cargo = "0.17.0"
+clap = { version = "4.5.50", features = ["derive", "wrap_help"] }
+clap-cargo = "0.18.3"
 rayon = "1.11.0"
 sha2 = "0.10.9"
 

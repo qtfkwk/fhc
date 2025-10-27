@@ -47,7 +47,7 @@ Options:
 
 ```
 $ fhc -V
-fhc 0.11.0
+fhc 0.11.1
 ```
 
 # Example
@@ -88,6 +88,7 @@ fhc 0.11.0
     * 0.10.3 (2025-02-20): Update dependencies
     * 0.10.4 (2025-04-16): Update dependencies
 * 0.11.0 (2025-08-28): Update dependencies; 2024 edition
+    * 0.11.1 (2025-10-27): Update dependencies
 
 [`criterion`]: https://crates.io/crates/criterion
 [`blake3`]: https://crates.io/crates/blake3
