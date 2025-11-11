@@ -1,19 +1,13 @@
-use anyhow::Result;
-use clap::{CommandFactory, Parser, builder::Styles};
-use fhc::*;
-use std::path::PathBuf;
-
-const STYLES: Styles = Styles::styled()
-    .header(clap_cargo::style::HEADER)
-    .usage(clap_cargo::style::USAGE)
-    .literal(clap_cargo::style::LITERAL)
-    .placeholder(clap_cargo::style::PLACEHOLDER)
-    .error(clap_cargo::style::ERROR)
-    .valid(clap_cargo::style::VALID)
-    .invalid(clap_cargo::style::INVALID);
+use {
+    anyhow::Result,
+    clap::{CommandFactory, Parser},
+    clap_cargo::style::CLAP_STYLING,
+    fhc::*,
+    std::path::PathBuf,
+};
 
 #[derive(Parser)]
-#[command(about, version, max_term_width = 80, styles = STYLES)]
+#[command(about, version, max_term_width = 80, styles = CLAP_STYLING)]
 struct Cli {
     /// Algorithm
     #[arg(short, default_value = "blake3")]
