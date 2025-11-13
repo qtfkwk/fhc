@@ -1,8 +1,7 @@
 use {
-    anyhow::Result,
     clap::{CommandFactory, Parser},
     clap_cargo::style::CLAP_STYLING,
-    fhc::*,
+    fhc::{Hash, ProcessOption},
     std::path::PathBuf,
 };
 
@@ -21,7 +20,7 @@ struct Cli {
     files: Vec<PathBuf>,
 }
 
-fn main() -> Result<()> {
+fn main() {
     let cli = Cli::parse();
 
     // Print help if no files or arguments
@@ -29,7 +28,7 @@ fn main() -> Result<()> {
         let mut cmd = Cli::command();
         cmd.build();
         cmd.print_help().unwrap();
-        return Ok(());
+        return;
     }
 
     let process = if cli.files.len() == 1 {
@@ -44,6 +43,4 @@ fn main() -> Result<()> {
             Err(e) => eprintln!("ERROR: {e}"),
         }
     }
-
-    Ok(())
 }

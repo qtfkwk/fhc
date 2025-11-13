@@ -26,7 +26,13 @@ pub enum Hash {
 }
 
 impl Hash {
-    /// Hash a file and return the hash(es) as `(ckfile, hash)` tuples
+    /**
+    Hash a file and return the hash(es) as `(ckfile, hash)` tuples
+
+    # Errors
+
+    Returns an error if not able to read the given file
+    */
     pub fn hash_file<P: AsRef<Path>>(&self, file: P) -> Result<Vec<(String, String)>> {
         match self {
             Hash::Blake3 => file_blake3(file),
@@ -45,7 +51,12 @@ impl Hash {
     If the hash file exists, hash the file, compare hashes, and return the result.
 
     If the hash file does not exist, hash the file, save the hash file, and return the result.
+
+    # Errors
+
+    Returns an error if not able to process the given file
     */
+    #[allow(clippy::missing_panics_doc)]
     pub fn process_file<P: AsRef<Path>>(&self, file: P) -> Result<String> {
         let file = file.as_ref();
 
@@ -73,7 +84,17 @@ impl Hash {
         })
     }
 
-    /// Get the expected hash(es) from hash file(s)
+    /**
+    Get the expected hash(es) from hash file(s)
+
+    # Panics
+
+    Panics if not able to get the expected hash from the hash file(s)
+
+    # Errors
+
+    Returns an error if not able to get the expected hash from the hash file(s)
+    */
     pub fn expected<P: AsRef<Path>>(&self, file: P) -> Result<Vec<(String, String)>> {
         let file = file.as_ref();
 
@@ -115,7 +136,13 @@ impl Hash {
     }
 }
 
-/// Calculate the SHA256 hash for a file
+/**
+Calculate the SHA256 hash for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -127,7 +154,13 @@ pub fn file_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     )])
 }
 
-/// Calculate the SHA512 hash for a file
+/**
+Calculate the SHA512 hash for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -139,7 +172,13 @@ pub fn file_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     )])
 }
 
-/// Calculate the BLAKE3 hash for a file
+/**
+Calculate the BLAKE3 hash for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_blake3<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -151,7 +190,13 @@ pub fn file_blake3<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     )])
 }
 
-/// Calculate the BLAKE3 and SHA256 hashes for a file
+/**
+Calculate the BLAKE3 and SHA256 hashes for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_blake3_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -176,7 +221,13 @@ pub fn file_blake3_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
     ])
 }
 
-/// Calculate the BLAKE3 and SHA512 hashes for a file
+/**
+Calculate the BLAKE3 and SHA512 hashes for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_blake3_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -201,7 +252,13 @@ pub fn file_blake3_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
     ])
 }
 
-/// Calculate the SHA256 and SHA512 hashes for a file
+/**
+Calculate the SHA256 and SHA512 hashes for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_sha256_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -226,7 +283,13 @@ pub fn file_sha256_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
     ])
 }
 
-/// Calculate all hashes for a file
+/**
+Calculate all hashes for a file
+
+# Errors
+
+Returns an error if not able to read the given file
+*/
 pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
@@ -328,7 +391,13 @@ pub fn threading<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     r
 }
 
-/// Process files with the given hash algorithm via messaging
+/**
+Process files with the given hash algorithm via messaging
+
+# Panics
+
+Panics if not able to spawn a thread
+*/
 pub fn messaging<P: AsRef<Path> + Clone + Send + Sync + 'static>(
     files: &[P],
     hash: Hash,
