@@ -47,7 +47,7 @@ Options:
 
 ```
 $ fhc -V
-fhc 0.11.3
+fhc 0.12.0
 ```
 
 # Example
@@ -92,6 +92,7 @@ fhc 0.11.3
     * 0.11.2 (2025-11-11): Use [`clap-cargo`] `CLAP_STYLING`; update dependencies
     * 0.11.3 (2025-11-13): Update dependencies; clippy fixes
     * 0.11.4 (2026-03-03): Update dependencies
+* 0.12.0 (2026-04-17): Update dependencies; overcome the sha2 crate removing `Write` trait for Sha256/Sha512 preventing the use of `std::io::copy`; enable reading files in limited chunks instead of reading the entire file into memory for `Hash::{Blake3Sha256,Blake3Sha512,Sha256Sha512,All}`
 
 [`clap-cargo`]: https://crates.io/crates/clap-cargo
 [`criterion`]: https://crates.io/crates/criterion

@@ -2,8 +2,9 @@ use {
     anyhow::{Result, anyhow},
     clap::ValueEnum,
     rayon::prelude::*,
-    sha2::{Digest, Sha256, Sha512},
+    sha2::{Digest, Sha256, Sha512, digest::DynDigest},
     std::{
+        fmt::Write as _,
         fs::File,
         io::{BufRead, BufReader, Read, Write, copy},
         path::Path,
@@ -12,6 +13,8 @@ use {
 
 #[cfg(test)]
 mod tests;
+
+const BUFFER_SIZE: usize = 4096;
 
 /// Hash algorithm
 #[derive(Clone, Copy, Debug, clap::ValueEnum)]
@@ -145,12 +148,22 @@ Returns an error if not able to read the given file
 */
 pub fn file_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
-    let mut f = File::open(file)?;
+    let mut f = BufReader::new(File::open(file)?);
     let mut hasher = Sha256::new();
-    copy(&mut f, &mut hasher)?;
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        Digest::update(&mut hasher, &buffer[..bytes_read]);
+    }
+    let mut buffer = vec![0; hasher.output_size()];
+    DynDigest::finalize_into(hasher, &mut buffer)?;
+    let hash = to_hex_string(&buffer);
     Ok(vec![(
         format!("{}.sha256", file.display()),
-        format!("SHA256:{:x}", hasher.finalize()),
+        format!("SHA256:{hash}"),
     )])
 }
 
@@ -165,10 +178,20 @@ pub fn file_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
     let mut hasher = Sha512::new();
-    copy(&mut f, &mut hasher)?;
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        Digest::update(&mut hasher, &buffer[..bytes_read]);
+    }
+    let mut buffer = vec![0; hasher.output_size()];
+    DynDigest::finalize_into(hasher, &mut buffer)?;
+    let hash = to_hex_string(&buffer);
     Ok(vec![(
         format!("{}.sha512", file.display()),
-        format!("SHA512:{:x}", hasher.finalize()),
+        format!("SHA512:{hash}"),
     )])
 }
 
@@ -200,14 +223,24 @@ Returns an error if not able to read the given file
 pub fn file_blake3_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
-    let mut buf = vec![];
-    f.read_to_end(&mut buf)?;
 
     let mut hasher_b3 = blake3::Hasher::new();
-    hasher_b3.update(&buf);
-
     let mut hasher_sha256 = Sha256::new();
-    hasher_sha256.update(&buf);
+
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        let buf = &buffer[..bytes_read];
+        hasher_b3.update(buf);
+        Digest::update(&mut hasher_sha256, buf);
+    }
+
+    let mut buffer = vec![0; hasher_sha256.output_size()];
+    DynDigest::finalize_into(hasher_sha256, &mut buffer)?;
+    let hash_sha256 = to_hex_string(&buffer);
 
     Ok(vec![
         (
@@ -216,7 +249,7 @@ pub fn file_blake3_sha256<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
         ),
         (
             format!("{}.sha256", file.display()),
-            format!("SHA256:{:x}", hasher_sha256.finalize()),
+            format!("SHA256:{hash_sha256}"),
         ),
     ])
 }
@@ -231,14 +264,24 @@ Returns an error if not able to read the given file
 pub fn file_blake3_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
-    let mut buf = vec![];
-    f.read_to_end(&mut buf)?;
 
     let mut hasher_b3 = blake3::Hasher::new();
-    hasher_b3.update(&buf);
-
     let mut hasher_sha512 = Sha512::new();
-    hasher_sha512.update(&buf);
+
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        let buf = &buffer[..bytes_read];
+        hasher_b3.update(buf);
+        Digest::update(&mut hasher_sha512, buf);
+    }
+
+    let mut buffer = vec![0; hasher_sha512.output_size()];
+    DynDigest::finalize_into(hasher_sha512, &mut buffer)?;
+    let hash_sha512 = to_hex_string(&buffer);
 
     Ok(vec![
         (
@@ -247,7 +290,7 @@ pub fn file_blake3_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String
         ),
         (
             format!("{}.sha512", file.display()),
-            format!("SHA512:{:x}", hasher_sha512.finalize()),
+            format!("SHA512:{hash_sha512}"),
         ),
     ])
 }
@@ -262,23 +305,37 @@ Returns an error if not able to read the given file
 pub fn file_sha256_sha512<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
-    let mut buf = vec![];
-    f.read_to_end(&mut buf)?;
 
     let mut hasher_sha256 = Sha256::new();
-    hasher_sha256.update(&buf);
-
     let mut hasher_sha512 = Sha512::new();
-    hasher_sha512.update(&buf);
+
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        let buf = &buffer[..bytes_read];
+        Digest::update(&mut hasher_sha256, buf);
+        Digest::update(&mut hasher_sha512, buf);
+    }
+
+    let mut buffer = vec![0; hasher_sha256.output_size()];
+    DynDigest::finalize_into(hasher_sha256, &mut buffer)?;
+    let hash_sha256 = to_hex_string(&buffer);
+
+    let mut buffer = vec![0; hasher_sha512.output_size()];
+    DynDigest::finalize_into(hasher_sha512, &mut buffer)?;
+    let hash_sha512 = to_hex_string(&buffer);
 
     Ok(vec![
         (
             format!("{}.sha256", file.display()),
-            format!("SHA256:{:x}", hasher_sha256.finalize()),
+            format!("SHA256:{hash_sha256}"),
         ),
         (
             format!("{}.sha512", file.display()),
-            format!("SHA512:{:x}", hasher_sha512.finalize()),
+            format!("SHA512:{hash_sha512}"),
         ),
     ])
 }
@@ -293,17 +350,30 @@ Returns an error if not able to read the given file
 pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
     let file = file.as_ref();
     let mut f = File::open(file)?;
-    let mut buf = vec![];
-    f.read_to_end(&mut buf)?;
 
     let mut hasher_b3 = blake3::Hasher::new();
-    hasher_b3.update(&buf);
-
     let mut hasher_sha256 = Sha256::new();
-    hasher_sha256.update(&buf);
-
     let mut hasher_sha512 = Sha512::new();
-    hasher_sha512.update(&buf);
+
+    let mut buffer = [0; BUFFER_SIZE];
+    loop {
+        let bytes_read = f.read(&mut buffer)?;
+        if bytes_read == 0 {
+            break;
+        }
+        let buf = &buffer[..bytes_read];
+        hasher_b3.update(buf);
+        Digest::update(&mut hasher_sha256, buf);
+        Digest::update(&mut hasher_sha512, buf);
+    }
+
+    let mut buffer = vec![0; hasher_sha256.output_size()];
+    DynDigest::finalize_into(hasher_sha256, &mut buffer)?;
+    let hash_sha256 = to_hex_string(&buffer);
+
+    let mut buffer = vec![0; hasher_sha512.output_size()];
+    DynDigest::finalize_into(hasher_sha512, &mut buffer)?;
+    let hash_sha512 = to_hex_string(&buffer);
 
     Ok(vec![
         (
@@ -312,11 +382,11 @@ pub fn file_all<P: AsRef<Path>>(file: P) -> Result<Vec<(String, String)>> {
         ),
         (
             format!("{}.sha256", file.display()),
-            format!("SHA256:{:x}", hasher_sha256.finalize()),
+            format!("SHA256:{hash_sha256}"),
         ),
         (
             format!("{}.sha512", file.display()),
-            format!("SHA512:{:x}", hasher_sha512.finalize()),
+            format!("SHA512:{hash_sha512}"),
         ),
     ])
 }
@@ -431,4 +501,12 @@ pub fn rayon_par_iter<P: AsRef<Path> + Clone + Send + Sync + 'static>(
         .par_iter()
         .map(|file| hash.process_file(file))
         .collect()
+}
+
+/// Convert a finalized hash to a hex string
+fn to_hex_string(buffer: &[u8]) -> String {
+    buffer.iter().fold(String::new(), |mut output, b| {
+        let _ = write!(output, "{b:02x}");
+        output
+    })
 }
